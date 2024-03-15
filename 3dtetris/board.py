@@ -42,19 +42,19 @@ class Board:
         elif view == 1:
             for z in range(10):
                 for y in range(19, -1, -1):
-                    for x in range(10):
+                    for x in range(9, -1, -1):
                         if self.board_size[x][y][z] != 0:
                             blocks.print_cube((z, y, (9 - x)), screen, COLOR_ARRAY[abs(self.board_size[x][y][z]) - 1])
 
         elif view == 2:
-            for z in range(10):
+            for z in range(9, -1, -1):
                 for y in range(19, -1, -1):
-                    for x in range(10):
+                    for x in range(9, -1, -1):
                         if self.board_size[x][y][z] != 0:
                             blocks.print_cube(((9 - x), y, (9 - z)), screen, COLOR_ARRAY[abs(self.board_size[x][y][z]) - 1])
 
         elif view == 3:
-            for z in range(10):
+            for z in range(9, -1, -1):
                 for y in range(19, -1, -1):
                     for x in range(10):
                         if self.board_size[x][y][z] != 0:

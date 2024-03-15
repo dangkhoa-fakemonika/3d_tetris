@@ -1,5 +1,7 @@
 import random
 
+import pygame
+
 from all_assets import *
 import blocks
 import board
@@ -53,6 +55,8 @@ while run:
                 view += 1
                 if view > 3:
                     view = 0
+            if events.key == pygame.K_UP:
+                view = 0
         if events.type == pygame.KEYUP and pressed:
             pressed = False
 
