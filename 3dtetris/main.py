@@ -16,23 +16,6 @@ frames = 1
 
 new_board = board.Board()
 
-# new_board.insert_blocks([
-#     [(0, 0, 0), 1],
-#     [(1, 2, 3), 2],
-#     [(4, 5, 7), 3],
-#     [(9, 10, 2), 4],
-#     [(3, 5, 9), 5],
-#     [(0, 12, 0), 6],
-#     [(7, 7, 7), 7],
-#     [(2, 0, 2), 8],
-#     [(8, 11, 3), 9],
-#     [(5, 5, 5), 10],
-#     [(6, 3, 0), 11],
-#     [(9, 9, 9), 12],
-#     [(5, 14, 5), 13],
-#     [(9, 19, 9), 14]
-# ])
-
 run = True
 pressed = False
 while run:
@@ -45,8 +28,11 @@ while run:
             break
         if events.type == pygame.KEYDOWN and not pressed:
             if events.key == pygame.K_SPACE:
-                new_board.insert_block((random.randint(0, 9), 0, random.randint(0, 9)), random.randint(3, 14))
+                # new_board.insert_block((0, 0, 0), random.randint(3, 14))
+                new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 7)], (random.randint(2, 8), 1, random.randint(2, 8)), random.randint(3, 14))
                 pressed = True
+            if events.key == pygame.K_EQUALS:
+                new_board.clear_board()
             if events.key == pygame.K_LEFT:
                 view -= 1
                 if view < 0:
