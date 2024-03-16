@@ -22,16 +22,20 @@ def draw_border(surface):
 
 
 class Board:
+    # New board
     def __init__(self):
         self.board_size = [[[0 for x in range(10)] for y in range(24)] for z in range(10)]
 
+    # Insert singular block
     def insert_block(self, cord, color):
         self.board_size[cord[0]][cord[1]][cord[2]] = color
 
+    # Insert multiple blocks
     def insert_blocks(self, cords):
         for coord in cords:
             self.insert_block(coord[0], coord[1])
 
+    # Insert
     def insert_piece(self, shape, center, color):
         for block in shape.value:
             self.insert_block((block[0] + center[0], block[1] + center[1], block[2] + center[2]), color)
@@ -104,6 +108,7 @@ class Board:
                                          (800 + (9 - z) * 20, 120 + y * 20, 20, 20), width=1)
 
     def update_board(self):
+        is_falling = False
         for y in range(23, -1, -1):
             for z in range(10):
                 for x in range(10):
@@ -114,5 +119,8 @@ class Board:
                         self.board_size[x][y][z] *= -1
 
                     else:
+                        is_falling = True
                         self.board_size[x][y + 1][z] = self.board_size[x][y][z]
                         self.board_size[x][y][z] = 0
+
+        return is_falling
