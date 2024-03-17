@@ -4,6 +4,7 @@ from all_assets import *
 import blocks
 import all_rotations
 
+
 def draw_border(surface):
     pygame.draw.aalines(surface, (255, 255, 255), False, [
         (100, 200),

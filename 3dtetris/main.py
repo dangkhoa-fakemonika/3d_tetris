@@ -34,7 +34,7 @@ while run:
         if events.type == pygame.KEYDOWN and not pressed:
             # Manually spawn pieces
             if events.key == pygame.K_SPACE:
-                new_board.insert_piece(SHAPE_ARRAY[p], (random.randint(2, 8), 1, random.randint(2, 8)), random.randint(3, 14))
+                new_board.insert_piece(SHAPE_ARRAY[p], (3, 8, 3), random.randint(3, 14))
                 pressed = True
 
             # Clear board
@@ -67,7 +67,7 @@ while run:
 
             if events.key == pygame.K_q:
                 x_spin += 1
-                x_spin %= 3
+                x_spin %= 4
 
             if events.key == pygame.K_w:
                 y_spin += 1
@@ -84,14 +84,14 @@ while run:
             pressed = False
 
     # Update frames
-    if frames == FPS//4:
+    if frames == FPS:
         frames = 0
-        new_board.update_board()
+        # new_board.update_board()
         if not new_board.is_falling_piece:
-            new_board.insert_piece(SHAPE_ARRAY[p], (random.randint(2, 8), 1, random.randint(2, 8)),
-                                   random.randint(3, 14))
-            p += 1
-        p %= 7
+            new_board.insert_piece(SHAPE_ARRAY[p], (3, 4, 3), random.randint(3, 14))
+        # p += 1
+        # p %= 7
+        print(x_spin + 1, y_spin + 1, z_spin + 1)
 
     new_board.spin_piece(x_spin, y_spin, z_spin)
     screen.fill(COLORS.BLACK.value)
