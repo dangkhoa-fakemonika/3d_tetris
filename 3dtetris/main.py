@@ -16,6 +16,7 @@ frames = 1
 falling = False
 
 new_board = board.Board()
+p = 0
 
 run = True
 pressed = False
@@ -29,8 +30,8 @@ while run:
             break
         if events.type == pygame.KEYDOWN and not pressed:
             # Manually spawn pieces
-            if events.key == pygame.K_SPACE and not falling:
-                new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 7)], (random.randint(2, 8), 1, random.randint(2, 8)), random.randint(3, 14))
+            if events.key == pygame.K_SPACE:
+                new_board.insert_piece(SHAPE_ARRAY[p], (random.randint(2, 8), 1, random.randint(2, 8)), random.randint(3, 14))
                 pressed = True
 
             # Clear board
@@ -47,6 +48,20 @@ while run:
                 if view > 3:
                     view = 0
 
+            if events.key == pygame.K_x:
+                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                    new_board.move_piece(-1, 0, 0)
+                else:
+                    new_board.move_piece(1, 0, 0)
+                pressed = True
+
+            if events.key == pygame.K_z:
+                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                    new_board.move_piece(0, 0, -1)
+                else:
+                    new_board.move_piece(0, 0, 1)
+                pressed = True
+
             # Reset view
             if events.key == pygame.K_UP:
                 view = 0
@@ -54,12 +69,15 @@ while run:
             pressed = False
 
     # Update frames
-    if frames == FPS//8:
+    if frames == FPS//4:
         frames = 0
-        falling = new_board.update_board()
-        if not falling:
-            new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 7)], (random.randint(2, 8), 1, random.randint(2, 8)),
+        new_board.update_board()
+        if not new_board.is_falling_piece:
+            new_board.insert_piece(SHAPE_ARRAY[p], (random.randint(2, 8), 1, random.randint(2, 8)),
                                    random.randint(3, 14))
+            p += 1
+        p %= 7
+
     screen.fill(COLORS.BLACK.value)
     board.draw_border(screen)
     new_board.print_board_data(screen, view)

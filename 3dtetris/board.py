@@ -25,6 +25,8 @@ class Board:
     # New board
     def __init__(self):
         self.board_size = [[[0 for x in range(10)] for y in range(24)] for z in range(10)]
+        self.is_falling_piece = False
+        self.current_piece = [[0, 0, 0], [0, 0, 0]]
 
     # Insert singular block
     def insert_block(self, cord, color):
@@ -37,8 +39,86 @@ class Board:
 
     # Insert
     def insert_piece(self, shape, center, color):
-        for block in shape.value:
-            self.insert_block((block[0] + center[0], block[1] + center[1], block[2] + center[2]), color)
+        # print("inserted")
+        if not self.is_falling_piece:
+            for block in shape.value:
+                self.insert_block((block[0] + center[0], block[1] + center[1], block[2] + center[2]), color)
+            self.is_falling_piece = True
+            self.current_piece[0][0] = center[0] - 1
+            self.current_piece[0][1] = center[1]
+            self.current_piece[0][2] = center[2] - 1
+            self.current_piece[1][0] = center[0] + 2
+            self.current_piece[1][1] = center[1] + 3
+            self.current_piece[1][2] = center[2] + 2
+
+    def move_piece(self, x, y, z):
+        if x == 1:
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 24 and 0 <= z <= 9 and 0 <= x <= 9 and self.board_size[x][y][z] > 0:
+                            if x == 9 or self.board_size[x + 1][y][z] < 0:
+                                return
+
+            for x in range(self.current_piece[1][0], self.current_piece[0][0] - 1, -1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 24 and 0 <= z <= 9 and 0 <= x <= 8 and self.board_size[x][y][z] > 0:
+                            self.board_size[x + 1][y][z] = self.board_size[x][y][z]
+                            self.board_size[x][y][z] = 0
+            self.current_piece[0][0] += 1
+            self.current_piece[1][0] += 1
+
+        elif x == -1:
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 24 and 0 <= z <= 9 and 0 <= x <= 9 and self.board_size[x][y][z] > 0:
+                            if x == 0 or self.board_size[x - 1][y][z] < 0:
+                                return
+
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 24 and 0 <= z <= 9 and 1 <= x <= 9 and self.board_size[x][y][z] > 0:
+                            self.board_size[x - 1][y][z] = self.board_size[x][y][z]
+                            self.board_size[x][y][z] = 0
+            self.current_piece[0][0] -= 1
+            self.current_piece[1][0] -= 1
+
+        elif z == 1:
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 24 and 0 <= z <= 9 and 0 <= x <= 9 and self.board_size[x][y][z] > 0:
+                            if z == 9 or self.board_size[x][y][z + 1] < 0:
+                                return
+
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[1][2], self.current_piece[0][2] - 1, -1):
+                        if y < 24 and 0 <= z <= 8 and 0 <= x <= 9 and self.board_size[x][y][z] > 0:
+                            self.board_size[x][y][z + 1] = self.board_size[x][y][z]
+                            self.board_size[x][y][z] = 0
+            self.current_piece[0][2] += 1
+            self.current_piece[1][2] += 1
+
+        elif z == -1:
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 24 and 0 <= z <= 9 and 0 <= x <= 9 and self.board_size[x][y][z] > 0:
+                            if z == 0 or self.board_size[x][y][z - 1] < 0:
+                                return
+
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 24 and 1 <= z <= 9 and 0 <= x <= 9 and self.board_size[x][y][z] > 0:
+                            self.board_size[x][y][z - 1] = self.board_size[x][y][z]
+                            self.board_size[x][y][z] = 0
+            self.current_piece[0][2] -= 1
+            self.current_piece[1][2] -= 1
 
     def clear_board(self):
         for z in range(10):
@@ -108,19 +188,33 @@ class Board:
                                          (800 + (9 - z) * 20, 120 + y * 20, 20, 20), width=1)
 
     def update_board(self):
-        is_falling = False
-        for y in range(23, -1, -1):
-            for z in range(10):
-                for x in range(10):
-                    if self.board_size[x][y][z] <= 0:
-                        continue
+        if not self.is_falling_piece:
+            return
 
-                    if y == 23 or self.board_size[x][y + 1][z] != 0:
-                        self.board_size[x][y][z] *= -1
+        collision = False
+        for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+            for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                    if y < 24 and 0 <= z <= 9 and 0 <= x <= 9:
+                        if self.board_size[x][y][z] <= 0:
+                            continue
+                        elif y == 23 or self.board_size[x][y + 1][z] < 0:
+                            collision = True
+        if collision:
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 24 and 0 <= z <= 9 and 0 <= x <= 9 and self.board_size[x][y][z] > 0:
+                            self.board_size[x][y][z] *= -1
+            self.is_falling_piece = False
+        else:
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[1][1], self.current_piece[0][1] - 1, -1):
+                    for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+                        if y < 23 and 0 <= z <= 9 and 9 >= x >= 0 and self.board_size[x][y][z] > 0:
+                            self.board_size[x][y + 1][z] = self.board_size[x][y][z]
+                            self.board_size[x][y][z] = 0
+            self.current_piece[0][1] += 1
+            self.current_piece[1][1] += 1
 
-                    else:
-                        is_falling = True
-                        self.board_size[x][y + 1][z] = self.board_size[x][y][z]
-                        self.board_size[x][y][z] = 0
 
-        return is_falling
