@@ -14,6 +14,9 @@ view = 0
 game_clock = pygame.time.Clock()
 frames = 1
 falling = False
+x_spin = 0
+y_spin = 0
+z_spin = 0
 
 new_board = board.Board()
 p = 0
@@ -62,6 +65,18 @@ while run:
                     new_board.move_piece(0, 0, 1)
                 pressed = True
 
+            if events.key == pygame.K_q:
+                x_spin += 1
+                x_spin %= 3
+
+            if events.key == pygame.K_w:
+                y_spin += 1
+                y_spin %= 4
+
+            if events.key == pygame.K_e:
+                z_spin += 1
+                z_spin %= 4
+
             # Reset view
             if events.key == pygame.K_UP:
                 view = 0
@@ -78,6 +93,7 @@ while run:
             p += 1
         p %= 7
 
+    new_board.spin_piece(x_spin, y_spin, z_spin)
     screen.fill(COLORS.BLACK.value)
     board.draw_border(screen)
     new_board.print_board_data(screen, view)

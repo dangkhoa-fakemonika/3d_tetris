@@ -2,7 +2,7 @@ import pygame.draw
 
 from all_assets import *
 import blocks
-
+import all_rotations
 
 def draw_border(surface):
     pygame.draw.aalines(surface, (255, 255, 255), False, [
@@ -27,6 +27,8 @@ class Board:
         self.board_size = [[[0 for x in range(10)] for y in range(24)] for z in range(10)]
         self.is_falling_piece = False
         self.current_piece = [[0, 0, 0], [0, 0, 0]]
+        self.piece_type = "I_PIECE"
+        self.piece_color = 0
 
     # Insert singular block
     def insert_block(self, cord, color):
@@ -50,6 +52,16 @@ class Board:
             self.current_piece[1][0] = center[0] + 2
             self.current_piece[1][1] = center[1] + 3
             self.current_piece[1][2] = center[2] + 2
+            self.piece_color = color
+
+    def spin_piece(self, dirt_x, dirt_y, dirt_z):
+        for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
+            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
+                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
+                    self.board_size[x][y][z] = 0
+        for block in all_rotations.PieceRotation[self.piece_type].value[dirt_x][dirt_y][dirt_z]:
+            self.insert_block((block[0] + self.current_piece[0][0] + 1, block[1] + self.current_piece[0][1], block[2]
+                               + self.current_piece[0][2] + 1), self.piece_color)
 
     def move_piece(self, x, y, z):
         if x == 1:
