@@ -14,9 +14,6 @@ view = 0
 game_clock = pygame.time.Clock()
 frames = 1
 falling = False
-x_spin = 0
-y_spin = 0
-z_spin = 0
 
 new_board = board.Board()
 p = 0
@@ -34,7 +31,7 @@ while run:
         if events.type == pygame.KEYDOWN and not pressed:
             # Manually spawn pieces
             if events.key == pygame.K_SPACE:
-                new_board.insert_piece(SHAPE_ARRAY[p], (3, 8, 3), random.randint(3, 14))
+                new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 7)], (3, 8, 3), random.randint(3, 14))
                 pressed = True
 
             # Clear board
@@ -65,17 +62,26 @@ while run:
                     new_board.move_piece(0, 0, 1)
                 pressed = True
 
-            if events.key == pygame.K_q:
-                x_spin += 1
-                x_spin %= 4
+            if events.key == pygame.K_e:
+                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                    new_board.spin_piece(0, 0, -1)
+                else:
+                    new_board.spin_piece(0, 0, 1)
+                pressed = True
 
             if events.key == pygame.K_w:
-                y_spin += 1
-                y_spin %= 4
+                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                    new_board.spin_piece(0, -1, 0)
+                else:
+                    new_board.spin_piece(0, 1, 0)
+                pressed = True
 
-            if events.key == pygame.K_e:
-                z_spin += 1
-                z_spin %= 4
+            if events.key == pygame.K_q:
+                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                    new_board.spin_piece(-1, 0, 0)
+                else:
+                    new_board.spin_piece(1, 0, 0)
+                pressed = True
 
             # Reset view
             if events.key == pygame.K_UP:
@@ -86,14 +92,10 @@ while run:
     # Update frames
     if frames == FPS:
         frames = 0
-        # new_board.update_board()
+        new_board.update_board()
         if not new_board.is_falling_piece:
-            new_board.insert_piece(SHAPE_ARRAY[p], (3, 4, 3), random.randint(3, 14))
-        # p += 1
-        # p %= 7
-        print(x_spin + 1, y_spin + 1, z_spin + 1)
-
-    new_board.spin_piece(x_spin, y_spin, z_spin)
+            new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 7)], (3, 4, 3), random.randint(3, 14))
+       
     screen.fill(COLORS.BLACK.value)
     board.draw_border(screen)
     new_board.print_board_data(screen, view)

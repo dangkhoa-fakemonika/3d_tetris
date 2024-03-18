@@ -56,13 +56,244 @@ class Board:
             self.piece_color = color
 
     def spin_piece(self, dirt_x, dirt_y, dirt_z):
-        for z in range(self.current_piece[0][2], self.current_piece[1][2] + 1):
-            for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
-                for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
-                    self.board_size[x][y][z] = 0
-        for block in all_rotations.PieceRotation[self.piece_type].value[dirt_x][dirt_y][dirt_z]:
-            self.insert_block((block[0] + self.current_piece[0][0] + 1, block[1] + self.current_piece[0][1], block[2]
-                               + self.current_piece[0][2] + 1), self.piece_color)
+        rot = [[[0 for z in range(4)] for y in range(4)] for x in range(4)]
+        if dirt_x == 1:
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (
+                                0 <= x + self.current_piece[0][0] <= 9 and
+                                y + self.current_piece[0][1] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 23 and
+                                self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
+                            ):
+                                rot[x][3 - z][y] = \
+                                    self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]]
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] < 0 <
+                                    rot[x][y][z]):
+                                del rot
+                                return
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        if self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = 0
+                        if rot[x][y][z] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = rot[x][y][z]
+
+        if dirt_x == -1:
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (
+                                0 <= x + self.current_piece[0][0] <= 9 and
+                                y + self.current_piece[0][1] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 23 and
+                                self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
+                            ):
+                                rot[x][z][3 - y] = \
+                                    self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]]
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] < 0 <
+                                    rot[x][y][z]):
+                                del rot
+                                return
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        if self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = 0
+                        if rot[x][y][z] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = rot[x][y][z]
+        if dirt_y == 1:
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (
+                                0 <= x + self.current_piece[0][0] <= 9 and
+                                y + self.current_piece[0][1] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 23 and
+                                self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
+                            ):
+                                rot[z][y][3 - x] = \
+                                    self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]]
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] < 0 <
+                                    rot[x][y][z]):
+                                del rot
+                                return
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        if self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = 0
+                        if rot[x][y][z] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = rot[x][y][z]
+
+        if dirt_y == -1:
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (
+                                0 <= x + self.current_piece[0][0] <= 9 and
+                                y + self.current_piece[0][1] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 23 and
+                                self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
+                            ):
+                                rot[3 - z][y][x] = \
+                                    self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]]
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] < 0 <
+                                    rot[x][y][z]):
+                                del rot
+                                return
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        if self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = 0
+                        if rot[x][y][z] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = rot[x][y][z]
+        if dirt_z == 1:
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (
+                                0 <= x + self.current_piece[0][0] <= 9 and
+                                y + self.current_piece[0][1] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 23 and
+                                self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
+                            ):
+                                rot[y][3 - x][z] = \
+                                    self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]]
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] < 0 <
+                                    rot[x][y][z]):
+                                del rot
+                                return
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        if self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = 0
+                        if rot[x][y][z] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = rot[x][y][z]
+
+        if dirt_z == -1:
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (
+                                0 <= x + self.current_piece[0][0] <= 9 and
+                                y + self.current_piece[0][1] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 23 and
+                                self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
+                            ):
+                                rot[3 - y][x][z] = \
+                                    self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]]
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        try:
+                            if (self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] < 0 <
+                                    rot[x][y][z]):
+                                del rot
+                                return
+                        except IndexError:
+                            del rot
+                            return
+
+            for x in range(4):
+                for y in range(4):
+                    for z in range(4):
+                        if self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = 0
+                        if rot[x][y][z] > 0:
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] = rot[x][y][z]
 
     def move_piece(self, x, y, z):
         if x == 1:
