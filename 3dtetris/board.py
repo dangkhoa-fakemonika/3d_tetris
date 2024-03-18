@@ -2,7 +2,6 @@ import pygame.draw
 
 from all_assets import *
 import blocks
-import all_rotations
 
 
 def draw_border(surface):
@@ -28,8 +27,6 @@ class Board:
         self.board_size = [[[0 for x in range(10)] for y in range(24)] for z in range(10)]
         self.is_falling_piece = False
         self.current_piece = [[0, 0, 0], [0, 0, 0]]
-        self.piece_type = "I_PIECE"
-        self.piece_color = 0
 
     # Insert singular block
     def insert_block(self, cord, color):
@@ -53,7 +50,6 @@ class Board:
             self.current_piece[1][0] = center[0] + 2
             self.current_piece[1][1] = center[1] + 3
             self.current_piece[1][2] = center[2] + 2
-            self.piece_color = color
 
     def spin_piece(self, dirt_x, dirt_y, dirt_z):
         rot = [[[0 for z in range(4)] for y in range(4)] for x in range(4)]
@@ -65,7 +61,7 @@ class Board:
                             if (
                                 0 <= x + self.current_piece[0][0] <= 9 and
                                 y + self.current_piece[0][1] <= 23 and
-                                0 <= z + self.current_piece[0][2] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 9 and
                                 self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
                             ):
                                 rot[x][3 - z][y] = \
@@ -105,7 +101,7 @@ class Board:
                             if (
                                 0 <= x + self.current_piece[0][0] <= 9 and
                                 y + self.current_piece[0][1] <= 23 and
-                                0 <= z + self.current_piece[0][2] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 9 and
                                 self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
                             ):
                                 rot[x][z][3 - y] = \
@@ -144,7 +140,7 @@ class Board:
                             if (
                                 0 <= x + self.current_piece[0][0] <= 9 and
                                 y + self.current_piece[0][1] <= 23 and
-                                0 <= z + self.current_piece[0][2] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 9 and
                                 self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
                             ):
                                 rot[z][y][3 - x] = \
@@ -184,7 +180,7 @@ class Board:
                             if (
                                 0 <= x + self.current_piece[0][0] <= 9 and
                                 y + self.current_piece[0][1] <= 23 and
-                                0 <= z + self.current_piece[0][2] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 9 and
                                 self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
                             ):
                                 rot[3 - z][y][x] = \
@@ -223,7 +219,7 @@ class Board:
                             if (
                                 0 <= x + self.current_piece[0][0] <= 9 and
                                 y + self.current_piece[0][1] <= 23 and
-                                0 <= z + self.current_piece[0][2] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 9 and
                                 self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
                             ):
                                 rot[y][3 - x][z] = \
@@ -263,7 +259,7 @@ class Board:
                             if (
                                 0 <= x + self.current_piece[0][0] <= 9 and
                                 y + self.current_piece[0][1] <= 23 and
-                                0 <= z + self.current_piece[0][2] <= 23 and
+                                0 <= z + self.current_piece[0][2] <= 9 and
                                 self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] > 0
                             ):
                                 rot[3 - y][x][z] = \
@@ -369,6 +365,7 @@ class Board:
             for y in range(24):
                 for x in range(10):
                     self.board_size[x][y][z] = 0
+        self.is_falling_piece = False
 
     def print_board_data(self, screen, view=0):
         if view == 0:
@@ -460,5 +457,3 @@ class Board:
                             self.board_size[x][y][z] = 0
             self.current_piece[0][1] += 1
             self.current_piece[1][1] += 1
-
-

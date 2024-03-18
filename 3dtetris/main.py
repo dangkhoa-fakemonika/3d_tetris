@@ -1,9 +1,5 @@
 import random
-
-import pygame
-
 from all_assets import *
-import blocks
 import board
 
 pygame.init()
@@ -20,6 +16,7 @@ p = 0
 
 run = True
 pressed = False
+pause = False
 while run:
     game_clock.tick(FPS)
     frames += 1
@@ -30,23 +27,26 @@ while run:
             break
         if events.type == pygame.KEYDOWN and not pressed:
             # Manually spawn pieces
-            if events.key == pygame.K_SPACE:
-                new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 7)], (3, 8, 3), random.randint(3, 14))
+            if events.key == pygame.K_p:
+                pause = not pause
                 pressed = True
 
             # Clear board
             if events.key == pygame.K_EQUALS:
                 new_board.clear_board()
+                pressed = True
 
             # Move view
             if events.key == pygame.K_LEFT:
                 view -= 1
                 if view < 0:
                     view = 3
+                pressed = True
             if events.key == pygame.K_RIGHT:
                 view += 1
                 if view > 3:
                     view = 0
+                pressed = True
 
             if events.key == pygame.K_x:
                 if pygame.key.get_mods() & pygame.KMOD_SHIFT:
@@ -90,12 +90,13 @@ while run:
             pressed = False
 
     # Update frames
-    if frames == FPS:
+    if frames == FPS // 4:
         frames = 0
-        new_board.update_board()
-        if not new_board.is_falling_piece:
-            new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 7)], (3, 4, 3), random.randint(3, 14))
-       
+        if not pause:
+            new_board.update_board()
+            if not new_board.is_falling_piece:
+                new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 6)], (random.randint(3, 7), 0, random.randint(3, 7)), random.randint(3, 14))
+
     screen.fill(COLORS.BLACK.value)
     board.draw_border(screen)
     new_board.print_board_data(screen, view)
