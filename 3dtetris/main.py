@@ -1,4 +1,7 @@
 import random
+
+import pygame
+
 from all_assets import *
 import board
 
@@ -48,49 +51,59 @@ while run:
                     view = 0
                 pressed = True
 
-            if events.key == pygame.K_x:
-                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
-                    new_board.move_piece(-1, 0, 0)
-                else:
-                    new_board.move_piece(1, 0, 0)
-                pressed = True
-
-            if events.key == pygame.K_z:
-                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
-                    new_board.move_piece(0, 0, -1)
-                else:
-                    new_board.move_piece(0, 0, 1)
-                pressed = True
-
-            if events.key == pygame.K_e:
-                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
-                    new_board.spin_piece(0, 0, -1)
-                else:
-                    new_board.spin_piece(0, 0, 1)
-                pressed = True
-
-            if events.key == pygame.K_w:
-                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
-                    new_board.spin_piece(0, -1, 0)
-                else:
-                    new_board.spin_piece(0, 1, 0)
-                pressed = True
-
-            if events.key == pygame.K_q:
-                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
-                    new_board.spin_piece(-1, 0, 0)
-                else:
-                    new_board.spin_piece(1, 0, 0)
-                pressed = True
-
             # Reset view
             if events.key == pygame.K_UP:
                 view = 0
+
+            # Movements
+            if not pause:
+                if events.key == pygame.K_x:
+                    if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                        new_board.move_piece(-1, 0, 0)
+                    else:
+                        new_board.move_piece(1, 0, 0)
+                    pressed = True
+
+                if events.key == pygame.K_z:
+                    if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                        new_board.move_piece(0, 0, -1)
+                    else:
+                        new_board.move_piece(0, 0, 1)
+                    pressed = True
+
+                if events.key == pygame.K_c:
+                    new_board.move_piece(0, 1, 0)
+
+                if events.key == pygame.K_SPACE:
+                    new_board.move_piece(0, 100, 0)
+
+                # Spin piece
+                if events.key == pygame.K_e:
+                    if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                        new_board.spin_piece(0, 0, -1)
+                    else:
+                        new_board.spin_piece(0, 0, 1)
+                    pressed = True
+
+                if events.key == pygame.K_w:
+                    if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                        new_board.spin_piece(0, -1, 0)
+                    else:
+                        new_board.spin_piece(0, 1, 0)
+                    pressed = True
+
+                if events.key == pygame.K_q:
+                    if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                        new_board.spin_piece(-1, 0, 0)
+                    else:
+                        new_board.spin_piece(1, 0, 0)
+                    pressed = True
+
         if events.type == pygame.KEYUP and pressed:
             pressed = False
 
     # Update frames
-    if frames == FPS // 4:
+    if frames == FPS:
         frames = 0
         if not pause:
             new_board.update_board()

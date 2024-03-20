@@ -74,8 +74,10 @@ class Board:
                 for y in range(4):
                     for z in range(4):
                         try:
-                            if (self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] < 0 <
-                                    rot[x][y][z]):
+                            if (
+                                self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][z + self.current_piece[0][2]] < 0 <
+                                rot[x][y][z]
+                            ):
                                 del rot
                                 return
                         except IndexError:
@@ -326,6 +328,13 @@ class Board:
             self.current_piece[0][0] -= 1
             self.current_piece[1][0] -= 1
 
+        elif y == 1:
+            self.update_board()
+
+        elif y == 100:
+            while self.is_falling_piece:
+                self.update_board()
+
         elif z == 1:
             for x in range(self.current_piece[0][0], self.current_piece[1][0] + 1):
                 for y in range(self.current_piece[0][1], self.current_piece[1][1] + 1):
@@ -374,6 +383,7 @@ class Board:
                     for x in range(10):
                         if self.board_size[x][y][z] != 0:
                             blocks.print_cube((x, y, z), screen, COLOR_ARRAY[abs(self.board_size[x][y][z]) - 1])
+
         elif view == 1:
             for z in range(10):
                 for y in range(23, -1, -1):
@@ -400,33 +410,72 @@ class Board:
         for z in range(10):
             for y in range(23, -1, -1):
                 for x in range(10):
-                    if self.board_size[x][y][z] != 0:
+                    if self.board_size[x][y][z] < 0:
                         pygame.draw.rect(screen, COLOR_ARRAY[abs(self.board_size[x][y][z]) - 1],
                                          (400 + x * 20, 120 + y * 20, 20, 20))
                         pygame.draw.rect(screen, (255, 255, 255),
                                          (400 + x * 20, 120 + y * 20, 20, 20), width=1)
 
+        for z in range(4):
+            for y in range(3, -1, -1):
+                for x in range(4):
+                    if (
+                            0 <= x + self.current_piece[0][0] <= 9 and
+                            y + self.current_piece[0][1] <= 23 and
+                            0 <= z + self.current_piece[0][2] <= 9 and
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0
+                    ):
+                        pygame.draw.rect(screen, (255, 255, 255), (
+                            400 + (x + self.current_piece[0][0]) * 20, 120 + (y + self.current_piece[0][1]) * 20, 20, 20), width=3)
+
     def print_y_view(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), (600, 200, 200, 200), width=1)
-        for z in range(10):
+        for z in range(9, -1, -1):
             for y in range(24):
-                for x in range(10):
-                    if self.board_size[x][y][z] != 0:
+                for x in range(9, -1, -1):
+                    if self.board_size[x][y][z] < 0:
                         pygame.draw.rect(screen, COLOR_ARRAY[abs(self.board_size[x][y][z]) - 1],
                                          (600 + x * 20, 200 + z * 20, 20, 20))
                         pygame.draw.rect(screen, (255, 255, 255),
                                          (600 + x * 20, 200 + z * 20, 20, 20), width=1)
+
+        for z in range(3, -1, -1):
+            for y in range(4):
+                for x in range(3, -1, -1):
+                    if (
+                            0 <= x + self.current_piece[0][0] <= 9 and
+                            y + self.current_piece[0][1] <= 23 and
+                            0 <= z + self.current_piece[0][2] <= 9 and
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0
+                    ):
+                        pygame.draw.rect(screen, (255, 255, 255), (
+                            600 + (x + self.current_piece[0][0]) * 20, 200 + (z + self.current_piece[0][2]) * 20, 20, 20), width=3)
 
     def print_z_view(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), (800, 200, 200, 400), width=1)
         for z in range(10):
             for y in range(23, -1, -1):
                 for x in range(10):
-                    if self.board_size[x][y][z] != 0:
+                    if self.board_size[x][y][z] < 0:
                         pygame.draw.rect(screen, COLOR_ARRAY[abs(self.board_size[x][y][z]) - 1],
                                          (800 + (9 - z) * 20, 120 + y * 20, 20, 20))
                         pygame.draw.rect(screen, (255, 255, 255),
                                          (800 + (9 - z) * 20, 120 + y * 20, 20, 20), width=1)
+
+        for z in range(4):
+            for y in range(3, -1, -1):
+                for x in range(4):
+                    if (
+                            0 <= x + self.current_piece[0][0] <= 9 and
+                            y + self.current_piece[0][1] <= 23 and
+                            0 <= z + self.current_piece[0][2] <= 9 and
+                            self.board_size[x + self.current_piece[0][0]][y + self.current_piece[0][1]][
+                                z + self.current_piece[0][2]] > 0
+                    ):
+                        pygame.draw.rect(screen, (255, 255, 255), (
+                            800 + (9 - z - self.current_piece[0][2]) * 20, 120 + (y + self.current_piece[0][1]) * 20, 20, 20), width=3)
 
     def update_board(self):
         if not self.is_falling_piece:
