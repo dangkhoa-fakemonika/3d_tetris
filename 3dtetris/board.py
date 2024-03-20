@@ -376,6 +376,14 @@ class Board:
                     self.board_size[x][y][z] = 0
         self.is_falling_piece = False
 
+    def is_empty(self):
+        for z in range(10):
+            for y in range(24):
+                for x in range(10):
+                    if self.board_size[x][y][z] != 0:
+                        return False
+        return True
+
     def print_board_data(self, screen, view=0):
         if view == 0:
             for z in range(10):
@@ -506,3 +514,85 @@ class Board:
                             self.board_size[x][y][z] = 0
             self.current_piece[0][1] += 1
             self.current_piece[1][1] += 1
+
+    def update_matches(self):
+        if self.is_falling_piece or self.is_empty():
+            return
+
+        check_arr_x = [0 for i in range(10)]
+        check_arr_z = [0 for i in range(10)]
+
+        for x in range(10):
+            for i in range(10):
+                check_arr_z[i] = 0
+
+            for y in range(24):
+                for z in range(10):
+                    if self.board_size[x][y][z] != 0:
+                        check_arr_z[z] = self.board_size[x][y][z]
+
+            if 0 not in check_arr_z:
+                for y in range(24):
+                    for z in range(10):
+                        if self.board_size[x][y][z] != 0:
+                            self.board_size[x][y][z] = -100
+
+        for z in range(10):
+            for i in range(10):
+                check_arr_x[i] = 0
+
+            for y in range(24):
+                for x in range(10):
+                    if self.board_size[x][y][z] != 0:
+                        check_arr_x[x] = self.board_size[x][y][z]
+
+            if 0 not in check_arr_x:
+                for y in range(24):
+                    for x in range(10):
+                        if self.board_size[x][y][z] != 0:
+                            self.board_size[x][y][z] = -100
+
+        for y in range(24):
+            for i in range(10):
+                check_arr_x[i] = 0
+                check_arr_z[i] = 0
+
+            for x in range(10):
+                for z in range(10):
+                    if self.board_size[x][y][z] != 0:
+                        check_arr_x[x] = self.board_size[x][y][z]
+                        check_arr_z[z] = self.board_size[x][y][z]
+
+            if 0 not in check_arr_x or 0 not in check_arr_z:
+                for x in range(10):
+                    for z in range(10):
+                        if self.board_size[x][y][z] != 0:
+                            self.board_size[x][y][z] = -100
+
+        del check_arr_x
+        del check_arr_z
+
+        for z in range(10):
+            for y in range(24):
+                for x in range(10):
+                    if self.board_size[x][y][z] == -100:
+                        self.board_size[x][y][z] = 0
+
+        while True:
+            last_layer = False
+            for z in range(10):
+                for x in range(10):
+                    if self.board_size[x][23][z] != 0:
+                        last_layer = True
+                        break
+                if last_layer:
+                    break
+            if last_layer:
+                break
+
+            for y in range(22, -1, -1):
+                for z in range(10):
+                    for x in range(10):
+                        if self.board_size[x][y][z] != 0:
+                            self.board_size[x][y + 1][z] = self.board_size[x][y][z]
+                            self.board_size[x][y][z] = 0

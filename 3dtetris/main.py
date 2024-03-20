@@ -1,7 +1,4 @@
 import random
-
-import pygame
-
 from all_assets import *
 import board
 
@@ -107,6 +104,7 @@ while run:
         frames = 0
         if not pause:
             new_board.update_board()
+            new_board.update_matches()
             if not new_board.is_falling_piece:
                 new_board.insert_piece(SHAPE_ARRAY[random.randint(0, 6)], (random.randint(3, 7), 0, random.randint(3, 7)), random.randint(3, 14))
 
