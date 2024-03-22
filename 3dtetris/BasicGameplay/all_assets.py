@@ -1,8 +1,6 @@
 import pygame
 from enum import Enum
 import blocks
-import all_rotations
-
 
 WIDTH = 1280
 HEIGHT = 720

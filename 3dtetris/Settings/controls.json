@@ -1,0 +1,21 @@
+{
+  "x_forward": ["x",""],
+  "x_backward": ["x", "s"],
+  "y" : ["c", ""],
+  "y_drop": ["space", ""],
+  "z_forward": ["z",""],
+  "z_backward": ["z","shift"],
+
+  "x_spin" : ["q", ""],
+  "x_spin_rev" : ["q", "shift"],
+  "y_spin" : ["w", ""],
+  "y_spin_rev" : ["w", "shift"],
+  "z_spin" : ["e", ""],
+  "z_spin_rev" : ["e", "shift"],
+
+  "view_switch_forward" : ["left", ""],
+  "view_switch_backward": ["right", ""],
+
+  "pause" : ["p", ""],
+  "reset" : ["r", ""]
+}
